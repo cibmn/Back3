@@ -4,20 +4,17 @@ dotenv.config();
 
 import connectDB from "./config/db.js";
 import usersRouter from "./routes/usersRouter.js";
-import petsRouter from "./routes/petsRouter.js";
+import productsRouter from "./routes/productRouter.js"; 
 import mocksRouter from "./routes/mocksRouter.js";
 
 const app = express();
 
-// Middleware global
 app.use(express.json());
 
-// Health Check primero
 app.get("/", (req, res) => res.json({ ok: true, msg: "API Mocks - up" }));
 
-// Routers
 app.use("/api/users", usersRouter);
-app.use("/api/pets", petsRouter);
+app.use("/api/products", productsRouter); 
 app.use("/api/mocks", mocksRouter);
 
 const PORT = process.env.PORT || 4000;
