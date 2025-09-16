@@ -1,14 +1,14 @@
 import { Router } from "express";
-import ProductDao from "../daos/productDao.js";
-import ProductDto from "../dtos/productDtos.js";
+import PetDao from "../daos/petDao.js";
+import PetDto from "../dtos/petDtos.js";
 
 const router = Router();
-const productDao = new ProductDao();
+const petDao = new PetDao();
 
 router.get("/", async (req, res) => {
   try {
-    const products = await productDao.getAll();
-    const payload = products.map(p => new ProductDto(p));
+    const pets = await petDao.getAll();
+    const payload = pets.map((p) => new PetDto(p));
     res.json({ ok: true, payload });
   } catch (err) {
     res.status(500).json({ ok: false, error: err.message });

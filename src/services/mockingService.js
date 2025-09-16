@@ -1,7 +1,7 @@
 import bcrypt from "bcrypt";
 import { faker } from "@faker-js/faker";
 import mongoose from "mongoose";
-import UserModel from "../daos/models/userModel.js";  
+import UserModel from "../daos/models/userModel.js";
 
 const SALT_ROUNDS = 10;
 
@@ -27,7 +27,7 @@ export function generateMockUserObject(hashedPassword) {
     email,
     password: hashedPassword,
     role,
-    products: []
+    pets: [],
   };
 }
 
@@ -39,7 +39,6 @@ export async function generateMockUsers(n = 50) {
   }
   return arr;
 }
-
 
 export async function insertMockUsers(n = 50) {
   const users = await generateMockUsers(n);
