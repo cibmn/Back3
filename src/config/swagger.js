@@ -1,18 +1,27 @@
 import swaggerJSDoc from "swagger-jsdoc";
 import swaggerUi from "swagger-ui-express";
 
-const swaggerOptions = {
+const options = {
   definition: {
-    openapi: "3.0.1",
+    openapi: "3.0.0",
     info: {
-      title: "Back3 - Documentación API",
+      title: "Back3 API",
       version: "1.0.0",
-      description: "Documentación del módulo Users del proyecto Back3",
+      description: "Documentación de la API para usuarios, mascotas y adopciones",
     },
+    servers: [
+      {
+        url: "http://localhost:4000",
+      },
+    ],
   },
-  apis: ["./src/docs/**/*.yaml"], 
+  apis: ["./src/docs/*.yaml"],
 };
 
-const swaggerSpecs = swaggerJSDoc(swaggerOptions);
+const swaggerSpec = swaggerJSDoc(options);
 
-export { swaggerUi, swaggerSpecs };
+const setupSwagger = (app) => {
+  app.use("/api/docs", swaggerUi.serve, swaggerUi.setup(swaggerSpec));
+};
+
+export default setupSwagger;

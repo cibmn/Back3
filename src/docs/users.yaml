@@ -1,31 +1,81 @@
-openapi: 3.0.1
-info:
-  title: API Users - Back3
-  version: 1.0.0
-  description: Documentación de las rutas del módulo Users
-
 paths:
   /api/users:
     get:
       summary: Obtener todos los usuarios
+      tags: [Users]
       responses:
-        "200":
-          description: Lista de usuarios obtenida correctamente
-        "500":
-          description: Error en el servidor
+        '200':
+          description: Lista de usuarios
+        '401':
+          description: No autorizado
+        '403':
+          description: Rol insuficiente
 
   /api/users/{id}:
     get:
       summary: Obtener un usuario por ID
+      tags: [Users]
       parameters:
         - in: path
           name: id
           required: true
           schema:
             type: string
-          description: ID del usuario
       responses:
-        "200":
+        '200':
           description: Usuario encontrado
-        "404":
+        '401':
+          description: No autorizado
+        '403':
+          description: Rol insuficiente
+        '404':
+          description: Usuario no encontrado
+
+    patch:
+      summary: Actualizar un usuario
+      tags: [Users]
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                email:
+                  type: string
+      responses:
+        '200':
+          description: Usuario actualizado
+        '401':
+          description: No autorizado
+        '403':
+          description: Rol insuficiente
+        '404':
+          description: Usuario no encontrado
+
+    delete:
+      summary: Eliminar un usuario
+      tags: [Users]
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Usuario eliminado
+        '401':
+          description: No autorizado
+        '403':
+          description: Rol insuficiente
+        '404':
           description: Usuario no encontrado
