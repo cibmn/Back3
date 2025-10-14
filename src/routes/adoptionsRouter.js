@@ -1,66 +1,64 @@
 import { Router } from "express";
 import mongoose from "mongoose";
-
-import User from "../models/User.js";
-import Pet from "../models/Pet.js";
-import Adoption from "../models/Adoption.js";
+import UserDao from "../daos/userDao.js";
+import UserDto from "../dtos/userDtos.js";
+import { isAuth, authRole } from "../middlewares/auth.js";
 
 const router = Router();
+const userDao = new UserDao();
 
-// GET todas las adopciones
-router.get("/", async (req, res) => {
+router.get("/", isAuth, authRole(["admin"]), async (req, res) => {
   try {
-    const adoptions = await Adoption.find().populate("owner pet");
-    res.json(adoptions);
+    const users = await userDao.getAll();
+    const payload = users.map((u) => new UserDto(u));
+    res.json({ ok: true, payload });
   } catch (err) {
-    res.status(500).json({ error: err.message });
+    res.status(500).json({ ok: false, error: err.message });
   }
 });
 
-// GET adopción por ID
-router.get("/:id", async (req, res) => {
+router.get("/:id", isAuth, authRole(["admin"]), async (req, res) => {
   const { id } = req.params;
-
   if (!mongoose.Types.ObjectId.isValid(id)) {
-    return res.status(404).json({ error: "Invalid adoption ID" });
+    return res.status(404).json({ ok: false, error: "Invalid user ID" });
   }
-
   try {
-    const adoption = await Adoption.findById(id).populate("owner pet");
-    if (!adoption) return res.status(404).json({ error: "Adoption not found" });
-    res.json(adoption);
+    const user = await userDao.getById(id);
+    if (!user) return res.status(404).json({ ok: false, error: "User not found" });
+    const payload = new UserDto(user);
+    res.json({ ok: true, payload });
   } catch (err) {
-    res.status(500).json({ error: err.message });
+    res.status(500).json({ ok: false, error: err.message });
   }
 });
 
-// POST nueva adopción
-router.post("/:uid/:pid", async (req, res) => {
-  const { uid, pid } = req.params;
-
-  if (!mongoose.Types.ObjectId.isValid(uid) || !mongoose.Types.ObjectId.isValid(pid)) {
-    return res.status(400).json({ error: "Invalid User or Pet ID" });
+router.patch("/:id", isAuth, authRole(["admin"]), async (req, res) => {
+  const { id } = req.params;
+  if (!mongoose.Types.ObjectId.isValid(id)) {
+    return res.status(404).json({ ok: false, error: "Invalid user ID" });
   }
-
   try {
-    const user = await User.findById(uid);
-    const pet = await Pet.findById(pid);
-
-    if (!user || !pet) return res.status(404).json({ error: "User or Pet not found" });
-    if (pet.adopted) return res.status(400).json({ error: "Pet already adopted" });
-
-    const newAdoption = await Adoption.create({
-      owner: user._id,
-      pet: pet._id,
-      date: new Date(),
-    });
-
-    pet.adopted = true;
-    await pet.save();
-
-    res.status(201).json(newAdoption);
+    const user = await userDao.update(id, req.body);
+    if (!user) return res.status(404).json({ ok: false, error: "User not found" });
+    const payload = new UserDto(user);
+    res.json({ ok: true, payload });
   } catch (err) {
-    res.status(500).json({ error: err.message });
+    res.status(500).json({ ok: false, error: err.message });
+  }
+});
+
+router.delete("/:id", isAuth, authRole(["admin"]), async (req, res) => {
+  const { id } = req.params;
+  if (!mongoose.Types.ObjectId.isValid(id)) {
+    return res.status(404).json({ ok: false, error: "Invalid user ID" });
+  }
+  try {
+    const user = await userDao.delete(id);
+    if (!user) return res.status(404).json({ ok: false, error: "User not found" });
+    const payload = new UserDto(user);
+    res.json({ ok: true, payload });
+  } catch (err) {
+    res.status(500).json({ ok: false, error: err.message });
   }
 });
 
