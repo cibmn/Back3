@@ -1,4 +1,8 @@
-export const createAdoptionDTO = ({ uid, pid }) => {
-  if (!uid || !pid) throw new Error("User ID and Pet ID are required");
-  return { uid, pid };
-};
+export default class AdoptionDto {
+  constructor(adoption) {
+    this.id = adoption._id;
+    this.user = adoption.user;
+    this.pet = adoption.pet;
+    this.date = adoption.date;
+  }
+}
