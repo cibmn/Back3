@@ -1,7 +1,6 @@
 import * as chai from "chai";
 import supertest from "supertest";
 import jwt from "jsonwebtoken";
-import mongoose from "mongoose";
 
 const { expect } = chai;
 const requester = supertest("http://localhost:4000");
@@ -19,9 +18,9 @@ describe("Tests funcionales del módulo Adoption", () => {
       { expiresIn: "1h" }
     );
 
-    userId = "64f0c8a6f1a2b2a0a1d1e1f1"; 
-    petId = "64f0c8a6f1a2b2a0a1d1e20"; 
-    adoptedPetId = "64f0c8a6f1a2b2a0a1d1e21"; 
+    userId = "64f0c8a6f1a2b2a0a1d1e1f1";
+    petId = "64f0c8a6f1a2b2a0a1d1e20";
+    adoptedPetId = "64f0c8a6f1a2b2a0a1d1e21";
   });
 
   it("GET /api/adoptions debe devolver todas las adopciones", async () => {
@@ -31,7 +30,7 @@ describe("Tests funcionales del módulo Adoption", () => {
   });
 
   it("GET /api/adoptions/:id debe devolver una adopción existente", async () => {
-    const adoptionId = "64f0c8a6f1a2b2a0a1d1e30"; 
+    const adoptionId = "64f0c8a6f1a2b2a0a1d1e30";
     const { statusCode, body } = await requester.get(`/api/adoptions/${adoptionId}`);
     if (statusCode === 200) {
       expect(body).to.have.property("_id");

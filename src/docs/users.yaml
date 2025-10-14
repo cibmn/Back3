@@ -1,20 +1,37 @@
+openapi: 3.0.0
+info:
+  title: API Users
+  version: 1.0.0
 paths:
   /api/users:
     get:
       summary: Obtener todos los usuarios
-      tags: [Users]
       responses:
         '200':
           description: Lista de usuarios
-        '401':
-          description: No autorizado
-        '403':
-          description: Rol insuficiente
-
+    post:
+      summary: Crear un usuario
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                email:
+                  type: string
+                password:
+                  type: string
+      responses:
+        '201':
+          description: Usuario creado
+        '400':
+          description: Error en los datos
   /api/users/{id}:
     get:
-      summary: Obtener un usuario por ID
-      tags: [Users]
+      summary: Obtener usuario por ID
       parameters:
         - in: path
           name: id
@@ -24,16 +41,10 @@ paths:
       responses:
         '200':
           description: Usuario encontrado
-        '401':
-          description: No autorizado
-        '403':
-          description: Rol insuficiente
         '404':
-          description: Usuario no encontrado
-
+          description: No encontrado
     patch:
-      summary: Actualizar un usuario
-      tags: [Users]
+      summary: Actualizar usuario
       parameters:
         - in: path
           name: id
@@ -54,16 +65,10 @@ paths:
       responses:
         '200':
           description: Usuario actualizado
-        '401':
-          description: No autorizado
-        '403':
-          description: Rol insuficiente
-        '404':
-          description: Usuario no encontrado
-
+        '400':
+          description: Error en los datos
     delete:
-      summary: Eliminar un usuario
-      tags: [Users]
+      summary: Eliminar usuario
       parameters:
         - in: path
           name: id
@@ -73,9 +78,5 @@ paths:
       responses:
         '200':
           description: Usuario eliminado
-        '401':
-          description: No autorizado
-        '403':
-          description: Rol insuficiente
         '404':
-          description: Usuario no encontrado
+          description: No encontrado
