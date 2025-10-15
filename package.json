@@ -6,7 +6,7 @@
   "scripts": {
     "start": "node src/app.js",
     "dev": "nodemon src/app.js",
-    "test": "cross-env NODE_ENV=test mocha \"src/test/**/*.test.js\" --timeout 10000"
+    "test": "cross-env NODE_ENV=test node --experimental-vm-modules node_modules/mocha/bin/mocha \"src/test/index.js\" --timeout 10000"
   },
   "dependencies": {
     "@faker-js/faker": "^10.0.0",

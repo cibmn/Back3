@@ -6,4 +6,4 @@ const adoptionSchema = new mongoose.Schema({
   createdAt: { type: Date, default: Date.now }
 });
 
-export default mongoose.model("Adoption", adoptionSchema);
+export default mongoose.models.Adoption || mongoose.model("Adoption", adoptionSchema);

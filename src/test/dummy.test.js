@@ -1,8 +1,7 @@
-import { describe, it } from "mocha";
-import { strict as assert } from "assert";
+import { expect } from "chai";
 
 describe("Dummy test", () => {
   it("debería pasar siempre", () => {
-    assert.equal(1, 1);
+    expect(1 + 1).to.equal(2);
   });
 });

@@ -7,4 +7,4 @@ const petSchema = new mongoose.Schema({
   adopted: { type: Boolean, default: false }
 });
 
-export default mongoose.model("Pet", petSchema);
+export default mongoose.models.Pet || mongoose.model("Pet", petSchema);

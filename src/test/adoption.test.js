@@ -1,12 +1,12 @@
-import * as chai from "chai";
+import mongoose from "mongoose";
 import supertest from "supertest";
 import jwt from "jsonwebtoken";
-import mongoose from "mongoose";
+import { expect } from "chai";
 
 import app from "../app.js";
-import Adoption from "../models/Adoption.js";
-import UserModel from "../models/UserModel.js";
-import Pet from "../models/Pet.js";
+import Adoption from "../models/Adoption.js";  
+import User from "../models/UserModel.js";           
+import Pet from "../models/Pet.js";           
 
 const { expect } = chai;
 const requester = supertest(app);
@@ -14,19 +14,20 @@ const requester = supertest(app);
 let token, userId, petId, adoptedPetId;
 
 before(async () => {
+  console.log("=== before start ===");
   await mongoose.connect(process.env.MONGO_URI || "mongodb://127.0.0.1:27017/back3_test");
+  console.log("=== DB connected ===");
 
   await Adoption.deleteMany({});
-  await UserModel.deleteMany({});
+  await User.deleteMany({});
   await Pet.deleteMany({});
+  console.log("=== Collections cleared ===");
 
-  const user = await UserModel.create({
+  const user = await User.create({
     firstName: "Test",
     lastName: "User",
     email: "test@example.com",
     password: "123456",
-    pets: [],
-    role: "admin", 
   });
 
   const pet = await Pet.create({ name: "Firulais", species: "Perro", age: 3 });
@@ -43,14 +44,14 @@ after(async () => {
   await mongoose.connection.close();
 });
 
-describe("Tests funcionales del módulo Adoption", () => {
+describe("Módulo Adoption", () => {
   it("GET /api/adoptions debe devolver todas las adopciones", async () => {
     const res = await requester.get("/api/adoptions").set("Authorization", `Bearer ${token}`);
     expect(res.status).to.equal(200);
     expect(res.body).to.have.property("adoptions").that.is.an("array");
   });
 
-  it("POST /api/adoptions/:uid/:pid debe crear una adopción correctamente", async () => {
+  it("POST /api/adoptions/:uid/:pid crea adopción correctamente", async () => {
     const res = await requester.post(`/api/adoptions/${userId}/${petId}`).set("Authorization", `Bearer ${token}`);
     expect(res.status).to.equal(201);
     expect(res.body).to.have.property("adoption");

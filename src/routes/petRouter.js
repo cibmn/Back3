@@ -3,10 +3,12 @@ import mongoose from "mongoose";
 import PetDao from "../daos/petDao.js";
 import PetDto from "../dtos/petDtos.js";
 import { isAuth } from "../middlewares/isAuthMiddleware.js";
+import { authRole } from "../middlewares/authRole.js";
 
 const router = Router();
 const petDao = new PetDao();
 
+// Ruta pública: listar todas las mascotas
 router.get("/", async (req, res) => {
   try {
     const pets = await petDao.getAll();
@@ -17,7 +19,8 @@ router.get("/", async (req, res) => {
   }
 });
 
-router.post("/", isAuth (["admin"]), async (req, res) => {
+// Crear mascota (solo admin)
+router.post("/", isAuth, authRole(["admin"]), async (req, res) => {
   try {
     const pet = await petDao.create(req.body);
     const payload = new PetDto(pet);
@@ -27,7 +30,8 @@ router.post("/", isAuth (["admin"]), async (req, res) => {
   }
 });
 
-router.patch("/:id", isAuth (["admin"]), async (req, res) => {
+// Actualizar mascota por ID (solo admin)
+router.patch("/:id", isAuth, authRole(["admin"]), async (req, res) => {
   const { id } = req.params;
 
   if (!mongoose.Types.ObjectId.isValid(id)) {
@@ -44,7 +48,8 @@ router.patch("/:id", isAuth (["admin"]), async (req, res) => {
   }
 });
 
-router.delete("/:id", isAuth (["admin"]), async (req, res) => {
+// Eliminar mascota por ID (solo admin)
+router.delete("/:id", isAuth, authRole(["admin"]), async (req, res) => {
   const { id } = req.params;
 
   if (!mongoose.Types.ObjectId.isValid(id)) {
