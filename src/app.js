@@ -12,30 +12,30 @@ import swaggerUi from "swagger-ui-express";
 import { swaggerSpec } from "./config/swagger.js";
 
 const app = express();
-
 app.use(express.json());
+
 
 app.use("/api/docs", swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 
 app.get("/", (req, res) => res.json({ ok: true, msg: "API Mocks - up" }));
-
 app.use("/api/users", usersRouter);
 app.use("/api/pets", petsRouter);
 app.use("/api/mocks", mocksRouter);
 app.use("/api/adoptions", adoptionsRouter);
 
-const PORT = process.env.PORT || 4000;
-
-connectDB()
-  .then(() => {
-    app.listen(PORT, () => {
-      console.log(`✅ Server listening on port ${PORT}`);
-      console.log(`📘 Swagger docs available at: http://localhost:${PORT}/api/docs`);
+if (process.env.NODE_ENV !== "test") {
+  const PORT = process.env.PORT || 4000;
+  connectDB()
+    .then(() => {
+      app.listen(PORT, () => {
+        console.log(`✅ Server listening on port ${PORT}`);
+        console.log(`📘 Swagger docs available at: http://localhost:${PORT}/api/docs`);
+      });
+    })
+    .catch((err) => {
+      console.error("❌ Failed to connect DB:", err);
+      process.exit(1);
     });
-  })
-  .catch((err) => {
-    console.error("❌ Failed to connect DB:", err);
-    process.exit(1);
-  });
+}
 
 export default app;

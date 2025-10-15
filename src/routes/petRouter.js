@@ -2,7 +2,7 @@ import { Router } from "express";
 import mongoose from "mongoose";
 import PetDao from "../daos/petDao.js";
 import PetDto from "../dtos/petDtos.js";
-import { isAuth, authRole } from "../middlewares/isAuth.js";
+import { isAuth } from "../middlewares/isAuthMiddleware.js";
 
 const router = Router();
 const petDao = new PetDao();
@@ -17,7 +17,7 @@ router.get("/", async (req, res) => {
   }
 });
 
-router.post("/", isAuth, authRole(["admin"]), async (req, res) => {
+router.post("/", isAuth (["admin"]), async (req, res) => {
   try {
     const pet = await petDao.create(req.body);
     const payload = new PetDto(pet);
@@ -27,7 +27,7 @@ router.post("/", isAuth, authRole(["admin"]), async (req, res) => {
   }
 });
 
-router.patch("/:id", isAuth, authRole(["admin"]), async (req, res) => {
+router.patch("/:id", isAuth (["admin"]), async (req, res) => {
   const { id } = req.params;
 
   if (!mongoose.Types.ObjectId.isValid(id)) {
@@ -44,7 +44,7 @@ router.patch("/:id", isAuth, authRole(["admin"]), async (req, res) => {
   }
 });
 
-router.delete("/:id", isAuth, authRole(["admin"]), async (req, res) => {
+router.delete("/:id", isAuth (["admin"]), async (req, res) => {
   const { id } = req.params;
 
   if (!mongoose.Types.ObjectId.isValid(id)) {

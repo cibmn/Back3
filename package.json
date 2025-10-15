@@ -6,25 +6,22 @@
   "scripts": {
     "start": "node src/app.js",
     "dev": "nodemon src/app.js",
-    "test": "mocha src/test/**/*.test.js --timeout 5000"
+    "test": "cross-env NODE_ENV=test mocha \"src/test/**/*.test.js\" --timeout 10000"
   },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
-  "description": "",
   "dependencies": {
     "@faker-js/faker": "^10.0.0",
     "bcrypt": "^6.0.0",
-    "dotenv": "^17.2.2",
+    "dotenv": "^17.2.3",
     "express": "^5.1.0",
     "jsonwebtoken": "^9.0.2",
-    "mongoose": "^8.18.1",
+    "mongoose": "^8.19.1",
     "swagger-jsdoc": "^6.2.8",
     "swagger-ui-express": "^5.0.1"
   },
   "devDependencies": {
     "chai": "^6.2.0",
     "chai-http": "^5.1.2",
+    "cross-env": "^10.1.0",
     "mocha": "^11.7.4",
     "nodemon": "^3.1.10",
     "supertest": "^7.1.4"

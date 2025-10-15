@@ -2,12 +2,12 @@ import { Router } from "express";
 import mongoose from "mongoose";
 import UserDao from "../daos/userDao.js";
 import UserDto from "../dtos/userDto.js";
-import { isAuth, authRole } from "../middlewares/isAuth.js";
+import { isAuth } from "../middlewares/isAuthMiddleware.js";
 
 const router = Router();
 const userDao = new UserDao();
 
-router.get("/", isAuth, authRole(["admin"]), async (req, res) => {
+router.get("/", isAuth (["admin"]), async (req, res) => {
   try {
     const users = await userDao.getAll();
     const payload = users.map((u) => new UserDto(u));
@@ -17,7 +17,7 @@ router.get("/", isAuth, authRole(["admin"]), async (req, res) => {
   }
 });
 
-router.get("/:id", isAuth, authRole(["admin"]), async (req, res) => {
+router.get("/:id", isAuth (["admin"]), async (req, res) => {
   const { id } = req.params;
   if (!mongoose.Types.ObjectId.isValid(id)) {
     return res.status(404).json({ ok: false, error: "Invalid user ID" });
@@ -32,7 +32,7 @@ router.get("/:id", isAuth, authRole(["admin"]), async (req, res) => {
   }
 });
 
-router.patch("/:id", isAuth, authRole(["admin"]), async (req, res) => {
+router.patch("/:id", isAuth (["admin"]), async (req, res) => {
   const { id } = req.params;
   if (!mongoose.Types.ObjectId.isValid(id)) {
     return res.status(404).json({ ok: false, error: "Invalid user ID" });
@@ -47,7 +47,7 @@ router.patch("/:id", isAuth, authRole(["admin"]), async (req, res) => {
   }
 });
 
-router.delete("/:id", isAuth, authRole(["admin"]), async (req, res) => {
+router.delete("/:id", isAuth (["admin"]), async (req, res) => {
   const { id } = req.params;
   if (!mongoose.Types.ObjectId.isValid(id)) {
     return res.status(404).json({ ok: false, error: "Invalid user ID" });
