@@ -15,7 +15,7 @@ let token, userId, petId, adoptedPetId;
 before(async () => {
   // Conectar a la DB de test
   await mongoose.connect(process.env.MONGO_URI || "mongodb://127.0.0.1:27017/back3_test");
-  
+
   // Limpiar colecciones
   await Adoption.deleteMany({});
   await UserModel.deleteMany({});
@@ -27,6 +27,7 @@ before(async () => {
     lastName: "User",
     email: "test@example.com",
     password: "123456",
+    role: "admin", // IMPORTANTE para pasar el check de roles
   });
 
   const pet = await Pet.create({ name: "Firulais", species: "Perro", age: 3 });
@@ -37,7 +38,7 @@ before(async () => {
   adoptedPetId = adoptedPet._id.toString();
 
   token = jwt.sign(
-    { id: userId, role: "admin" },
+    { id: userId, role: user.role },
     process.env.JWT_SECRET || "secretkey",
     { expiresIn: "1h" }
   );
@@ -48,20 +49,34 @@ after(async () => {
 });
 
 describe("Módulo Adoption", () => {
+  beforeEach(async () => {
+    // Limpiar adopciones antes de cada test
+    await Adoption.deleteMany({});
+  });
+
   it("GET /api/adoptions", async () => {
-    const res = await requester.get("/api/adoptions").set("Authorization", `Bearer ${token}`);
+    const res = await requester
+      .get("/api/adoptions")
+      .set("Authorization", `Bearer ${token}`);
+
     expect(res.status).to.equal(200);
     expect(res.body).to.have.property("adoptions").that.is.an("array");
   });
 
   it("POST /api/adoptions/:uid/:pid crea adopción", async () => {
-    const res = await requester.post(`/api/adoptions/${userId}/${petId}`).set("Authorization", `Bearer ${token}`);
+    const res = await requester
+      .post(`/api/adoptions/${userId}/${petId}`)
+      .set("Authorization", `Bearer ${token}`);
+
     expect(res.status).to.equal(201);
     expect(res.body).to.have.property("adoption");
   });
 
   it("POST /api/adoptions con mascota adoptada debe fallar", async () => {
-    const res = await requester.post(`/api/adoptions/${userId}/${adoptedPetId}`).set("Authorization", `Bearer ${token}`);
+    const res = await requester
+      .post(`/api/adoptions/${userId}/${adoptedPetId}`)
+      .set("Authorization", `Bearer ${token}`);
+
     expect(res.status).to.equal(400);
   });
 

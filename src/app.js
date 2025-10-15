@@ -1,19 +1,17 @@
 import express from "express";
 import dotenv from "dotenv";
-dotenv.config();
-
 import connectDB from "./config/db.js";
 import usersRouter from "./routes/usersRouter.js";
 import petsRouter from "./routes/petRouter.js";
 import mocksRouter from "./routes/mocksRouter.js";
 import adoptionsRouter from "./routes/adoptionsRouter.js";
-
 import swaggerUi from "swagger-ui-express";
 import { swaggerSpec } from "./config/swagger.js";
 
+dotenv.config();
+
 const app = express();
 app.use(express.json());
-
 
 app.use("/api/docs", swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 
@@ -23,19 +21,21 @@ app.use("/api/pets", petsRouter);
 app.use("/api/mocks", mocksRouter);
 app.use("/api/adoptions", adoptionsRouter);
 
+// 🔹 Cambiar esta línea:
+if (!process.env.MONGO_URI) {
+  console.error("❌ No se encontró MONGO_URI en las variables de entorno");
+  process.exit(1);
+}
+
+// 🔹 Conectamos a la base de datos (usa MONGO_URI desde config/db.js)
+await connectDB();
+
 if (process.env.NODE_ENV !== "test") {
   const PORT = process.env.PORT || 4000;
-  connectDB()
-    .then(() => {
-      app.listen(PORT, () => {
-        console.log(`✅ Server listening on port ${PORT}`);
-        console.log(`📘 Swagger docs available at: http://localhost:${PORT}/api/docs`);
-      });
-    })
-    .catch((err) => {
-      console.error("❌ Failed to connect DB:", err);
-      process.exit(1);
-    });
+  app.listen(PORT, () => {
+    console.log(`✅ Server listening on port ${PORT}`);
+    console.log(`📘 Swagger docs available at: http://localhost:${PORT}/api/docs`);
+  });
 }
 
 export default app;
