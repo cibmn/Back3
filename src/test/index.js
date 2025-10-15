@@ -1,1 +1,0 @@
-import "./adoption.test.js";
