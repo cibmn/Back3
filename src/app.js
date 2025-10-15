@@ -6,15 +6,16 @@ import connectDB from "./config/db.js";
 import usersRouter from "./routes/usersRouter.js";
 import petsRouter from "./routes/petRouter.js";
 import mocksRouter from "./routes/mocksRouter.js";
-
-import { swaggerUi, swaggerSpecs } from "./config/swagger.js";
 import adoptionsRouter from "./routes/adoptionsRouter.js";
+
+import swaggerUi from "swagger-ui-express";
+import { swaggerSpec } from "./config/swagger.js";
 
 const app = express();
 
 app.use(express.json());
 
-app.use("/api/docs", swaggerUi.serve, swaggerUi.setup(swaggerSpecs));
+app.use("/api/docs", swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 
 app.get("/", (req, res) => res.json({ ok: true, msg: "API Mocks - up" }));
 
@@ -22,7 +23,6 @@ app.use("/api/users", usersRouter);
 app.use("/api/pets", petsRouter);
 app.use("/api/mocks", mocksRouter);
 app.use("/api/adoptions", adoptionsRouter);
-
 
 const PORT = process.env.PORT || 4000;
 
@@ -37,3 +37,5 @@ connectDB()
     console.error("❌ Failed to connect DB:", err);
     process.exit(1);
   });
+
+export default app;

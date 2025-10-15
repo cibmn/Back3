@@ -2,7 +2,7 @@ import { Router } from "express";
 import mongoose from "mongoose";
 import PetDao from "../daos/petDao.js";
 import PetDto from "../dtos/petDtos.js";
-import { isAuth, authRole } from "../middlewares/auth.js";
+import { isAuth, authRole } from "../middlewares/isAuth.js";
 
 const router = Router();
 const petDao = new PetDao();

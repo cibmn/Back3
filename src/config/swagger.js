@@ -10,9 +10,7 @@ const options = {
       description: "Documentación de la API para usuarios, mascotas y adopciones",
     },
     servers: [
-      {
-        url: "http://localhost:4000",
-      },
+      { url: "http://localhost:4000" }
     ],
   },
   apis: ["./src/docs/*.yaml"],
@@ -24,4 +22,4 @@ const setupSwagger = (app) => {
   app.use("/api/docs", swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 };
 
-export default setupSwagger;
+export { swaggerSpec, setupSwagger };

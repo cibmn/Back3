@@ -1,8 +1,8 @@
 import { Router } from "express";
 import mongoose from "mongoose";
 import UserDao from "../daos/userDao.js";
-import UserDto from "../dtos/userDtos.js";
-import { isAuth, authRole } from "../middlewares/auth.js";
+import UserDto from "../dtos/userDto.js";
+import { isAuth, authRole } from "../middlewares/isAuth.js";
 
 const router = Router();
 const userDao = new UserDao();
