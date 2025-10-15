@@ -1,6 +1,6 @@
 import UserModel from "./models/userModel.js";
 
-class UserDao {
+export default class UserDao {
   async getAll() {
     return await UserModel.find();
   }
@@ -21,5 +21,3 @@ class UserDao {
     return await UserModel.findByIdAndDelete(id);
   }
 }
-
-export default new UserDao();

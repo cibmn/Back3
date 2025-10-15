@@ -1,17 +1,12 @@
 import mongoose from "mongoose";
 
-const userCollection = "User";
-
 const userSchema = new mongoose.Schema({
   firstName: { type: String, required: true },
   lastName: { type: String, required: true },
   email: { type: String, required: true, unique: true },
   password: { type: String, required: true },
   role: { type: String, enum: ["user", "admin"], default: "user" },
-  pets: { type: Array, default: [] },
+  pets: [{ type: mongoose.Schema.Types.ObjectId, ref: "pets" }],
 });
 
-const UserModel =
-  mongoose.models[userCollection] || mongoose.model(userCollection, userSchema);
-
-export default UserModel;
+export default mongoose.models.User || mongoose.model("User", userSchema);

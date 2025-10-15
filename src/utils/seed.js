@@ -2,7 +2,7 @@ import mongoose from "mongoose";
 import dotenv from "dotenv";
 dotenv.config();
 
-import User from "../models/User.js";
+import UserModel from "../models/userModel.js";
 import Pet from "../models/Pet.js";
 
 const connectDB = async () => {

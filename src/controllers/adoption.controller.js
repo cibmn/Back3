@@ -1,6 +1,6 @@
 // src/controllers/adoption.controller.js
 import Adoption from "../models/Adoption.js";
-import User from "../models/User.js";
+import UserModel from "../models/userModel.js";
 import Pet from "../models/Pet.js";
 
 export const getAdoptions = async (req, res) => {
