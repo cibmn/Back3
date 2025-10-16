@@ -1,10 +1,10 @@
-# Docker
 
-Construir imagen:
-docker build -t <usuario_dockerhub>/back3 .
+# Back3 - Entrega Final
 
-Ejecutar contenedor:
-docker run -p 4000:4000 <usuario_dockerhub>/back3
+Imagen Docker disponible en Docker Hub:
 
-Imagen en Dockerhub:
-https://hub.docker.com/r/<usuario_dockerhub>/back3
+[https://hub.docker.com/r/aksaya108/back3](https://hub.docker.com/r/aksaya108/back3)
+
+* MongoDB: puerto 27017
+* API: puerto 4000
+* Swagger Docs: `/api/docs`

@@ -1,0 +1,25 @@
+# docker-compose.yml
+services:
+  mongo:
+    image: mongo:6
+    container_name: mongo
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongo_data:/data/db
+    restart: unless-stopped
+
+  back3:
+    image: aksaya108/back3:latest
+    container_name: back3
+    build: .
+    ports:
+      - "5000:4000"  # Exponemos 4000 del contenedor en 5000 local
+    depends_on:
+      - mongo
+    environment:
+      - MONGO_URL=mongodb://mongo:27017/back3
+    restart: unless-stopped
+
+volumes:
+  mongo_data:
