@@ -3,12 +3,11 @@ import mongoose from "mongoose";
 import UserDao from "../daos/userDao.js";
 import UserDto from "../dtos/userDto.js";
 import { isAuth } from "../middlewares/isAuthMiddleware.js";
-import { authRole } from "../middlewares/authRole.js"; // <- asegurarte de tener esto
+import { authRole } from "../middlewares/authRole.js"; 
 
 const router = Router();
 const userDao = new UserDao();
 
-// Rutas protegidas para admin
 router.get("/", isAuth, authRole(["admin"]), async (req, res) => {
   try {
     const users = await userDao.getAll();

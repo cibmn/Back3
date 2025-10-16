@@ -13,21 +13,18 @@ const requester = supertest(app);
 let token, userId, petId, adoptedPetId;
 
 before(async () => {
-  // Conectar a la DB de test
   await mongoose.connect(process.env.MONGO_URI || "mongodb://127.0.0.1:27017/back3_test");
 
-  // Limpiar colecciones
   await Adoption.deleteMany({});
   await UserModel.deleteMany({});
   await Pet.deleteMany({});
 
-  // Crear usuario y mascotas de prueba
   const user = await UserModel.create({
     firstName: "Test",
     lastName: "User",
     email: "test@example.com",
     password: "123456",
-    role: "admin", // IMPORTANTE para pasar el check de roles
+    role: "admin", 
   });
 
   const pet = await Pet.create({ name: "Firulais", species: "Perro", age: 3 });
@@ -50,7 +47,6 @@ after(async () => {
 
 describe("Módulo Adoption", () => {
   beforeEach(async () => {
-    // Limpiar adopciones antes de cada test
     await Adoption.deleteMany({});
   });
 

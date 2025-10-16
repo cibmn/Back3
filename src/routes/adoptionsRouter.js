@@ -1,4 +1,3 @@
-// src/routes/adoptionsRouter.js
 import { Router } from "express";
 import { isAuth } from "../middlewares/isAuthMiddleware.js";
 import { getAdoptions, createAdoption } from "../controllers/adoption.controller.js";

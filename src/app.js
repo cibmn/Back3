@@ -21,13 +21,11 @@ app.use("/api/pets", petsRouter);
 app.use("/api/mocks", mocksRouter);
 app.use("/api/adoptions", adoptionsRouter);
 
-// 🔹 Cambiar esta línea:
 if (!process.env.MONGO_URI) {
   console.error("❌ No se encontró MONGO_URI en las variables de entorno");
   process.exit(1);
 }
 
-// 🔹 Conectamos a la base de datos (usa MONGO_URI desde config/db.js)
 await connectDB();
 
 if (process.env.NODE_ENV !== "test") {
