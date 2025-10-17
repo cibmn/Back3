@@ -33,7 +33,7 @@ export async function generateData(req, res) {
     ) {
       return res.status(400).json({
         ok: false,
-        error: "'users' y 'pets' están mal expresados",
+        error: "'users' y 'pets' estan mal expresados",
       });
     }
 

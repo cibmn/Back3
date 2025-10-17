@@ -2,21 +2,29 @@ openapi: 3.0.0
 info:
   title: API Users
   version: 1.0.0
+  description: Endpoints para gestion de usuarios
+tags:
+  - Users
 paths:
   /api/users:
     get:
-      summary: Obtener todos los usuarios
+      summary: Listar todos los usuarios
+      tags: [Users]
       responses:
-        '200':
+        "200":
           description: Lista de usuarios
+        "401":
+          description: No autorizado
     post:
       summary: Crear un usuario
+      tags: [Users]
       requestBody:
         required: true
         content:
           application/json:
             schema:
               type: object
+              required: [name, email, password]
               properties:
                 name:
                   type: string
@@ -25,13 +33,14 @@ paths:
                 password:
                   type: string
       responses:
-        '201':
+        "201":
           description: Usuario creado
-        '400':
-          description: Error en los datos
+        "400":
+          description: Email duplicado o error en los datos
   /api/users/{id}:
     get:
       summary: Obtener usuario por ID
+      tags: [Users]
       parameters:
         - in: path
           name: id
@@ -39,12 +48,13 @@ paths:
           schema:
             type: string
       responses:
-        '200':
+        "200":
           description: Usuario encontrado
-        '404':
-          description: No encontrado
+        "404":
+          description: Usuario no encontrado
     patch:
       summary: Actualizar usuario
+      tags: [Users]
       parameters:
         - in: path
           name: id
@@ -63,12 +73,15 @@ paths:
                 email:
                   type: string
       responses:
-        '200':
+        "200":
           description: Usuario actualizado
-        '400':
+        "400":
           description: Error en los datos
+        "403":
+          description: Rol insuficiente
     delete:
       summary: Eliminar usuario
+      tags: [Users]
       parameters:
         - in: path
           name: id
@@ -76,7 +89,9 @@ paths:
           schema:
             type: string
       responses:
-        '200':
+        "200":
           description: Usuario eliminado
-        '404':
-          description: No encontrado
+        "404":
+          description: Usuario no encontrado
+        "403":
+          description: Rol insuficiente

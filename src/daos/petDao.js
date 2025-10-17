@@ -1,15 +1,24 @@
-import petModel from "../models/petModel.js";
+// src/daos/petDao.js
+import Pet from "../models/Pet.js";
 
-export default class petDao {
-  async create(pet) {
-    return petModel.create(pet);
-  }
-
-  async insertMany(pets) {
-    return petModel.insertMany(pets, { ordered: false });
-  }
-
+export default class PetDao {
   async getAll() {
-    return petModel.find({});
+    return Pet.find({});
+  }
+
+  async getById(id) {
+    return Pet.findById(id);
+  }
+
+  async create(petData) {
+    return Pet.create(petData);
+  }
+
+  async update(id, data) {
+    return Pet.findByIdAndUpdate(id, data, { new: true });
+  }
+
+  async delete(id) {
+    return Pet.findByIdAndDelete(id);
   }
 }

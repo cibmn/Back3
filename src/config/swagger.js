@@ -7,11 +7,10 @@ const options = {
     info: {
       title: "Back3 API",
       version: "1.0.0",
-      description: "Documentación de la API para usuarios, mascotas y adopciones",
+      description:
+        "Documentacion de la API para usuarios, mascotas y adopciones",
     },
-    servers: [
-      { url: "http://localhost:4000" }
-    ],
+    servers: [{ url: "http://localhost:4000" }],
   },
   apis: ["./src/docs/*.yaml"],
 };

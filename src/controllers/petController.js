@@ -1,24 +1,30 @@
-import petModel from "../models/petModel.js";
-import { generateMockPets } from "../services/petsService.js";
-import petDto from "../dtos/petDtos.js";
+import Pet from "../models/Pet.js";
 
-export const listpets = async (req, res) => {
+export const listPets = async (req, res) => {
   try {
-    const pets = await petModel.find().lean();
-    return res.json({ ok: true, payload: pets });
-  } catch (err) {
-    console.error("listpets error:", err);
-    return res.status(500).json({ ok: false, error: "Server error listing pets" });
+    const pets = await Pet.find();
+    res.json({ ok: true, pets }); 
+  } catch (error) {
+    res.status(500).json({ ok: false, error: error.message });
   }
 };
 
-export const mockingpets = async (req, res) => {
+export const createPet = async (req, res) => {
   try {
-    const pets = generateMockPets(10); 
-    const payload = pets.map(p => new petDto(p));
-    return res.json({ ok: true, payload });
-  } catch (err) {
-    console.error("mockingpets error:", err);
-    return res.status(500).json({ ok: false, error: "Error generating mocking pets" });
+    const pet = await Pet.create(req.body);
+    res.status(201).json({ ok: true, pet });
+  } catch (error) {
+    res.status(500).json({ ok: false, error: error.message });
+  }
+};
+
+export const deletePet = async (req, res) => {
+  try {
+    const pet = await Pet.findByIdAndDelete(req.params.id);
+    if (!pet)
+      return res.status(404).json({ ok: false, error: "Pet not found" });
+    res.json({ ok: true, pet });
+  } catch (error) {
+    res.status(500).json({ ok: false, error: error.message });
   }
 };

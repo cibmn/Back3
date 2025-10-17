@@ -22,7 +22,7 @@ app.use("/api/mocks", mocksRouter);
 app.use("/api/adoptions", adoptionsRouter);
 
 if (!process.env.MONGO_URI) {
-  console.error("❌ No se encontró MONGO_URI en las variables de entorno");
+  console.error("❌ No se encontro MONGO_URI en las variables de entorno");
   process.exit(1);
 }
 

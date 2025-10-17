@@ -1,15 +1,54 @@
+openapi: 3.0.0
+info:
+  title: API Pets
+  version: 1.0.0
+  description: Endpoints para gestion de mascotas
+tags:
+  - Pets
 paths:
   /api/pets:
     get:
-      summary: Obtener todas las mascotas
+      summary: Listar todas las mascotas
       tags: [Pets]
       responses:
-        '200':
+        "200":
           description: Lista de mascotas
-
+        "401":
+          description: No autorizado
     post:
       summary: Crear una nueva mascota
       tags: [Pets]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [name, species, age]
+              properties:
+                name:
+                  type: string
+                species:
+                  type: string
+                age:
+                  type: number
+      responses:
+        "201":
+          description: Mascota creada
+        "401":
+          description: No autorizado
+        "403":
+          description: Rol insuficiente
+  /api/pets/{id}:
+    patch:
+      summary: Actualizar mascota
+      tags: [Pets]
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
       requestBody:
         required: true
         content:
@@ -24,9 +63,25 @@ paths:
                 age:
                   type: number
       responses:
-        '201':
-          description: Mascota creada
-        '401':
-          description: No autorizado
-        '403':
+        "200":
+          description: Mascota actualizada
+        "400":
+          description: Error en los datos
+        "403":
+          description: Rol insuficiente
+    delete:
+      summary: Eliminar mascota
+      tags: [Pets]
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Mascota eliminada
+        "404":
+          description: Mascota no encontrada
+        "403":
           description: Rol insuficiente

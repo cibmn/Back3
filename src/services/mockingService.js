@@ -1,7 +1,7 @@
 import bcrypt from "bcrypt";
 import { faker } from "@faker-js/faker";
 import mongoose from "mongoose";
-import UserModel from "../daos/models/userModel.js";
+import UserModel from "../models/userModel.js";
 
 const SALT_ROUNDS = 10;
 

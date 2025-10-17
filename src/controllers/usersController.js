@@ -1,42 +1,31 @@
-import User from "../models/UserModel.js";
+import UserModel from "../models/userModel.js";
 import bcrypt from "bcrypt";
+import jwt from "jsonwebtoken";
 
-export const updateUser = async (req, res) => {
+export const registerUser = async (req, res) => {
   try {
-    const { id } = req.params;
-    const updates = req.body;
+    const { email, password, role } = req.body;
+    const existingUser = await UserModel.findOne({ email });
+    if (existingUser)
+      return res.status(400).json({ ok: false, error: "Email already exists" });
 
-    if (updates.password) {
-      const salt = await bcrypt.genSalt(10);
-      updates.password = await bcrypt.hash(updates.password, salt);
-    }
-
-    const updatedUser = await User.findByIdAndUpdate(id, updates, { new: true, runValidators: true });
-
-    if (!updatedUser) {
-      return res.status(404).json({ message: "Usuario no encontrado" });
-    }
-
-    res.status(200).json({ message: "Usuario actualizado correctamente", user: updatedUser });
+    const hashedPassword = await bcrypt.hash(password, 10);
+    const user = await UserModel.create({
+      email,
+      password: hashedPassword,
+      role,
+    });
+    res.status(201).json({ ok: true, user });
   } catch (error) {
-    if (error.code === 11000) {
-      return res.status(400).json({ message: "Email ya existe" });
-    }
-    res.status(400).json({ message: error.message });
+    res.status(500).json({ ok: false, error: error.message });
   }
 };
 
-export const deleteUser = async (req, res) => {
+export const getUsers = async (req, res) => {
   try {
-    const { id } = req.params;
-    const deletedUser = await User.findByIdAndDelete(id);
-
-    if (!deletedUser) {
-      return res.status(404).json({ message: "Usuario no encontrado" });
-    }
-
-    res.status(200).json({ message: "Usuario eliminado correctamente", user: deletedUser });
+    const users = await UserModel.find();
+    res.json({ ok: true, users });
   } catch (error) {
-    res.status(400).json({ message: error.message });
+    res.status(500).json({ ok: false, error: error.message });
   }
 };
