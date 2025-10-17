@@ -1,6 +1,5 @@
 import AdoptionModel from "../models/Adoption.js";
 
-// GET /api/adoptions
 export const getAdoptions = async (req, res) => {
   try {
     const adoptions = await AdoptionModel.find({});
@@ -11,7 +10,6 @@ export const getAdoptions = async (req, res) => {
   }
 };
 
-// POST /api/adoptions/:uid/:pid
 export const createAdoption = async (req, res) => {
   try {
     const { uid, pid } = req.params;
@@ -25,7 +23,6 @@ export const createAdoption = async (req, res) => {
   }
 };
 
-// POST /api/adoptions (adopción directa)
 export const createAdoptionDirect = async (req, res) => {
   try {
     const { user, pet } = req.body;
