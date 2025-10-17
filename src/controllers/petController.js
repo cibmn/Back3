@@ -1,45 +1,57 @@
+// src/controllers/petController.js
 import Pet from "../models/Pet.js";
+import mongoose from "mongoose";
 
-export const listPets = async (req, res) => {
+/**
+ * GET /api/pets
+ * Lista todas las mascotas
+ */
+export const getPets = async (req, res) => {
   try {
-    const pets = await Pet.find({});
-    res.status(200).json({ ok: true, payload: pets }); // listado exitoso → 200
-  } catch (error) {
-    res.status(500).json({ ok: false, error: error.message });
+    const pets = await Pet.find();
+    res.status(200).json({ ok: true, payload: pets });
+  } catch (err) {
+    res.status(500).json({ ok: false, error: "Error retrieving pets" });
   }
 };
 
+/**
+ * POST /api/pets
+ * Crear nueva mascota (solo admin)
+ */
 export const createPet = async (req, res) => {
   try {
-    if (!req.body.name || !req.body.species) {
-      return res.status(400).json({ ok: false, error: "Missing required fields" });
+    const { name, species, age } = req.body;
+    if (!name || !species || age === undefined) {
+      return res.status(400).json({ ok: false, error: "Missing fields" });
     }
 
-    const pet = await Pet.create(req.body);
-    res.status(201).json({ ok: true, payload: pet }); // creación exitosa → 201
-  } catch (error) {
-    res.status(500).json({ ok: false, error: error.message });
+    const pet = await Pet.create({ name, species, age, adopted: false });
+    res.status(201).json({ ok: true, message: "Pet created", payload: pet });
+  } catch (err) {
+    res.status(500).json({ ok: false, error: "Error creating pet" });
   }
 };
 
-export const updatePet = async (req, res) => {
-  try {
-    const pet = await Pet.findByIdAndUpdate(req.params.id, req.body, { new: true });
-    if (!pet) return res.status(404).json({ ok: false, error: "Pet not found" }); // pet inexistente → 404
-    res.json({ ok: true, payload: pet });
-  } catch (error) {
-    res.status(500).json({ ok: false, error: error.message });
-  }
-};
-
+/**
+ * DELETE /api/pets/:id
+ * Eliminar mascota por id (solo admin)
+ */
 export const deletePet = async (req, res) => {
+  const { id } = req.params;
   try {
-    const pet = await Pet.findById(req.params.id);
-    if (!pet) return res.status(404).json({ ok: false, error: "Pet not found" }); // pet inexistente → 404
+    if (!mongoose.Types.ObjectId.isValid(id)) {
+      return res.status(404).json({ ok: false, error: "Pet not found" });
+    }
+
+    const pet = await Pet.findById(id);
+    if (!pet) {
+      return res.status(404).json({ ok: false, error: "Pet not found" });
+    }
 
     await pet.deleteOne();
-    res.status(200).json({ ok: true, message: "Pet deleted successfully" }); // eliminación exitosa → 200
-  } catch (error) {
-    res.status(500).json({ ok: false, error: error.message });
+    res.status(200).json({ ok: true, message: "Pet deleted" });
+  } catch (err) {
+    res.status(500).json({ ok: false, error: "Error deleting pet" });
   }
 };

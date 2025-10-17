@@ -1,23 +1,25 @@
-// src/routes/adoptionsRouter.js
 import { Router } from "express";
+import { isAuth } from "../middlewares/isAuthMiddleware.js";
+import { authRole } from "../middlewares/authRole.js";
 import {
   getAdoptions,
   createAdoption,
   createAdoptionDirect,
+  deleteAdoption
 } from "../controllers/adoption.controller.js";
-import { isAuth } from "../middlewares/isAuthMiddleware.js";
-import { authRole } from "../middlewares/authRole.js";
 
 const router = Router();
 
-// GET /api/adoptions
-router.get("/", isAuth, getAdoptions);
+// Listar adopciones
+router.get("/", isAuth, authRole(), getAdoptions);
 
-// POST /api/adoptions/:uid/:pid
+// Crear adopción usando params
 router.post("/:uid/:pid", isAuth, authRole(), createAdoption);
 
-// POST /api/adoptions (adopción directa)
+// Crear adopción usando body { user, pet }
 router.post("/", isAuth, authRole(), createAdoptionDirect);
 
-// Export default del router
+// Eliminar adopción por id
+router.delete("/:id", isAuth, authRole(), deleteAdoption);
+
 export default router;

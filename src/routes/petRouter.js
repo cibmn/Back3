@@ -2,20 +2,15 @@
 import { Router } from "express";
 import { isAuth } from "../middlewares/isAuthMiddleware.js";
 import { authRole } from "../middlewares/authRole.js";
-import {
-  listPets,
-  createPet,
-  deletePet,
-  updatePet,
-} from "../controllers/petController.js";
+import { getPets, createPet, deletePet } from "../controllers/petController.js";
 
 const router = Router();
 
-// Rutas
-router.get("/", isAuth, listPets);
+// Todos pueden listar mascotas
+router.get("/", isAuth, getPets);
+
+// Solo admin puede crear y eliminar
 router.post("/", isAuth, authRole(["admin"]), createPet);
-router.patch("/:id", isAuth, authRole(["admin"]), updatePet);
 router.delete("/:id", isAuth, authRole(["admin"]), deletePet);
 
-// Export default del router
 export default router;
