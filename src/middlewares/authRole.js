@@ -1,4 +1,3 @@
-// ejemplo authRole
 export const authRole = (roles = []) => {
   return (req, res, next) => {
     if (!roles.length) return next(); // si roles vacío, pasa
