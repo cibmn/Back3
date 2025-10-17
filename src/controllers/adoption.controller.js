@@ -1,13 +1,9 @@
-// src/controllers/adoption.controller.js
 import mongoose from "mongoose";
 import Adoption from "../models/Adoption.js";
 import UserModel from "../models/userModel.js";
 import Pet from "../models/Pet.js";
 
-/**
- * GET /api/adoptions
- * Lista todas las adopciones
- */
+
 export const getAdoptions = async (req, res) => {
   try {
     const adoptions = await Adoption.find();
@@ -23,10 +19,7 @@ export const getAdoptions = async (req, res) => {
   }
 };
 
-/**
- * POST /api/adoptions/:uid/:pid
- * Crear adopción usando params
- */
+
 export const createAdoption = async (req, res) => {
   const { uid, pid } = req.params;
 
@@ -57,10 +50,7 @@ export const createAdoption = async (req, res) => {
   }
 };
 
-/**
- * POST /api/adoptions
- * Crear adopción usando body { user, pet }
- */
+
 export const createAdoptionDirect = async (req, res) => {
   const { user, pet } = req.body;
 
@@ -91,10 +81,7 @@ export const createAdoptionDirect = async (req, res) => {
   }
 };
 
-/**
- * DELETE /api/adoptions/:id
- * Eliminar adopción por id
- */
+
 export const deleteAdoption = async (req, res) => {
   const { id } = req.params;
   try {

@@ -1,23 +1,17 @@
 import mongoose from "mongoose";
 import UserModel from "../models/userModel.js";
 
-/**
- * GET /api/users
- * Lista todos los usuarios
- */
+
 export const getUsers = async (req, res) => {
   try {
-    const users = await UserModel.find().select("-password"); // no devolver password
+    const users = await UserModel.find().select("-password"); 
     res.status(200).json({ ok: true, payload: users });
   } catch (err) {
     res.status(500).json({ ok: false, error: "Error retrieving users" });
   }
 };
 
-/**
- * POST /api/users
- * Crear un nuevo usuario
- */
+
 export const createUser = async (req, res) => {
   try {
     const { firstName, lastName, email, password, role } = req.body;
@@ -25,7 +19,6 @@ export const createUser = async (req, res) => {
       return res.status(400).json({ ok: false, error: "Missing fields" });
     }
 
-    // Verificar que no exista el email
     const existing = await UserModel.findOne({ email });
     if (existing) {
       return res.status(400).json({ ok: false, error: "Email already exists" });
@@ -38,10 +31,6 @@ export const createUser = async (req, res) => {
   }
 };
 
-/**
- * DELETE /api/users/:id
- * Eliminar usuario por id
- */
 export const deleteUser = async (req, res) => {
   const { id } = req.params;
   try {

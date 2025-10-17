@@ -1,4 +1,3 @@
-// src/routes/petRouter.js
 import { Router } from "express";
 import { isAuth } from "../middlewares/isAuthMiddleware.js";
 import { authRole } from "../middlewares/authRole.js";

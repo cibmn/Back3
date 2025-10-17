@@ -3,11 +3,10 @@ import Pet from "../models/Pet.js";
 
 const router = Router();
 
-// Obtener todas las mascotas
 router.get("/pets", async (req, res) => {
   try {
     const pets = await Pet.find();
-    res.status(200).json({ ok: true, pets }); // listado exitoso → 200
+    res.status(200).json({ ok: true, pets }); 
   } catch (err) {
     console.error(err);
     res
@@ -16,7 +15,6 @@ router.get("/pets", async (req, res) => {
   }
 });
 
-// Crear una mascota (mock o real)
 router.post("/pets", async (req, res) => {
   if (!req.body.name || !req.body.species) {
     return res
@@ -26,7 +24,7 @@ router.post("/pets", async (req, res) => {
 
   try {
     const pet = await Pet.create(req.body);
-    res.status(201).json({ ok: true, pet }); // creación exitosa → 201
+    res.status(201).json({ ok: true, pet }); 
   } catch (err) {
     console.error(err);
     res
@@ -35,7 +33,6 @@ router.post("/pets", async (req, res) => {
   }
 });
 
-// Eliminar una mascota por ID
 router.delete("/pets/:id", async (req, res) => {
   if (!req.params.id || !mongoose.Types.ObjectId.isValid(req.params.id)) {
     return res.status(404).json({ ok: false, error: "ID inválido" });
@@ -47,7 +44,7 @@ router.delete("/pets/:id", async (req, res) => {
       return res
         .status(404)
         .json({ ok: false, error: "Mascota no encontrada" });
-    res.status(200).json({ ok: true, pet }); // eliminación exitosa → 200
+    res.status(200).json({ ok: true, pet }); 
   } catch (err) {
     console.error(err);
     res

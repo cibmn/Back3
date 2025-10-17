@@ -1,4 +1,3 @@
-// test.mjs
 import mongoose from "mongoose";
 import supertest from "supertest";
 import { expect } from "chai";

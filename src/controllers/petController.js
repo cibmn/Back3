@@ -1,11 +1,7 @@
-// src/controllers/petController.js
 import Pet from "../models/Pet.js";
 import mongoose from "mongoose";
 
-/**
- * GET /api/pets
- * Lista todas las mascotas
- */
+
 export const getPets = async (req, res) => {
   try {
     const pets = await Pet.find();
@@ -15,10 +11,7 @@ export const getPets = async (req, res) => {
   }
 };
 
-/**
- * POST /api/pets
- * Crear nueva mascota (solo admin)
- */
+
 export const createPet = async (req, res) => {
   try {
     const { name, species, age } = req.body;
@@ -33,10 +26,7 @@ export const createPet = async (req, res) => {
   }
 };
 
-/**
- * DELETE /api/pets/:id
- * Eliminar mascota por id (solo admin)
- */
+
 export const deletePet = async (req, res) => {
   const { id } = req.params;
   try {

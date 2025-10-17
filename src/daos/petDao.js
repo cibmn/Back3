@@ -1,4 +1,3 @@
-// src/daos/petDao.js
 import Pet from "../models/Pet.js";
 
 export default class PetDao {

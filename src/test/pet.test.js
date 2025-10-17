@@ -60,7 +60,7 @@ describe("Modulo Pets", function () {
       .post("/api/pets")
       .set("Authorization", `Bearer ${adminToken}`)
       .send({ name: "Luna", species: "Gato", age: 1 });
-    expect(res.status).to.equal(201); // creación exitosa
+    expect(res.status).to.equal(201); 
   });
 
   it("POST /api/pets con rol user → 403", async () => {
@@ -68,20 +68,20 @@ describe("Modulo Pets", function () {
       .post("/api/pets")
       .set("Authorization", `Bearer ${userToken}`)
       .send({ name: "Rocky", species: "Perro", age: 5 });
-    expect(res.status).to.equal(403); // usuario sin rol suficiente
+    expect(res.status).to.equal(403); 
   });
 
   it("DELETE /api/pets/:id inexistente → 404", async () => {
     const res = await requester
       .delete("/api/pets/66a111111111111111111111")
       .set("Authorization", `Bearer ${adminToken}`);
-    expect(res.status).to.equal(404); // pet inexistente
+    expect(res.status).to.equal(404); 
   });
 
   it("POST /api/pets sin token → 401", async () => {
     const res = await requester
       .post("/api/pets")
       .send({ name: "SinToken", species: "Perro", age: 3 });
-    expect(res.status).to.equal(401); // token faltante
+    expect(res.status).to.equal(401); 
   });
 });
