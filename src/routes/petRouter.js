@@ -1,65 +1,21 @@
+// src/routes/petRouter.js
 import { Router } from "express";
-import mongoose from "mongoose";
-import PetDao from "../daos/petDao.js";
-import PetDto from "../dtos/petDtos.js";
 import { isAuth } from "../middlewares/isAuthMiddleware.js";
 import { authRole } from "../middlewares/authRole.js";
+import {
+  listPets,
+  createPet,
+  deletePet,
+  updatePet,
+} from "../controllers/petController.js";
 
 const router = Router();
-const petDao = new PetDao();
 
-router.get("/", async (req, res) => {
-  try {
-    const pets = await petDao.getAll();
-    const payload = pets.map((p) => new PetDto(p));
-    res.json({ ok: true, payload });
-  } catch (err) {
-    res.status(500).json({ ok: false, error: err.message });
-  }
-});
+// Rutas
+router.get("/", isAuth, listPets);
+router.post("/", isAuth, authRole(["admin"]), createPet);
+router.patch("/:id", isAuth, authRole(["admin"]), updatePet);
+router.delete("/:id", isAuth, authRole(["admin"]), deletePet);
 
-router.post("/", isAuth, authRole(["admin"]), async (req, res) => {
-  try {
-    const pet = await petDao.create(req.body);
-    const payload = new PetDto(pet);
-    res.status(201).json({ ok: true, payload });
-  } catch (err) {
-    res.status(500).json({ ok: false, error: err.message });
-  }
-});
-
-router.patch("/:id", isAuth, authRole(["admin"]), async (req, res) => {
-  const { id } = req.params;
-
-  if (!mongoose.Types.ObjectId.isValid(id)) {
-    return res.status(404).json({ ok: false, error: "Invalid pet ID" });
-  }
-
-  try {
-    const pet = await petDao.update(id, req.body);
-    if (!pet) return res.status(404).json({ ok: false, error: "Pet not found" });
-    const payload = new PetDto(pet);
-    res.json({ ok: true, payload });
-  } catch (err) {
-    res.status(500).json({ ok: false, error: err.message });
-  }
-});
-
-router.delete("/:id", isAuth, authRole(["admin"]), async (req, res) => {
-  const { id } = req.params;
-
-  if (!mongoose.Types.ObjectId.isValid(id)) {
-    return res.status(404).json({ ok: false, error: "Invalid pet ID" });
-  }
-
-  try {
-    const pet = await petDao.delete(id);
-    if (!pet) return res.status(404).json({ ok: false, error: "Pet not found" });
-    const payload = new PetDto(pet);
-    res.json({ ok: true, payload });
-  } catch (err) {
-    res.status(500).json({ ok: false, error: err.message });
-  }
-});
-
+// Export default del router
 export default router;

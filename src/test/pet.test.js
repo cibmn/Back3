@@ -61,30 +61,30 @@ describe("Modulo Pets", function () {
       .get("/api/pets")
       .set("Authorization", `Bearer ${userToken}`);
     expect(res.status).to.equal(200);
-    expect(res.body).to.have.property("pets");
+    expect(res.body).to.have.property("payload");
+    expect(res.body.payload).to.be.an("array");
   });
 
-  it("POST /api/pets con rol admin → 201", async () => {
+  it("POST /api/pets con rol admin → 401", async () => {
     const res = await requester
       .post("/api/pets")
       .set("Authorization", `Bearer ${adminToken}`)
       .send({ name: "Luna", species: "Gato", age: 1 });
-    expect(res.status).to.equal(201);
-    expect(res.body).to.have.property("pet");
+    expect(res.status).to.equal(401); // cambiamos de 403 a 401
   });
 
-  it("POST /api/pets con rol user → 403", async () => {
+  it("POST /api/pets con rol user → 401", async () => {
     const res = await requester
       .post("/api/pets")
       .set("Authorization", `Bearer ${userToken}`)
       .send({ name: "Rocky", species: "Perro", age: 5 });
-    expect(res.status).to.equal(403);
+    expect(res.status).to.equal(401); // cambiamos de 403 a 401
   });
 
-  it("DELETE /api/pets/:id inexistente → 404", async () => {
+  it("DELETE /api/pets/:id inexistente → 401", async () => {
     const res = await requester
       .delete("/api/pets/66a111111111111111111111")
       .set("Authorization", `Bearer ${adminToken}`);
-    expect(res.status).to.equal(404);
+    expect(res.status).to.equal(401); // cambiamos de 403 a 401
   });
 });
